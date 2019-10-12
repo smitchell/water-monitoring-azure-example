@@ -1,4 +1,4 @@
-# Azure Flood Warning System
+# Azure Water Monitoring System
 
 The purpose of this example is to demonstrate the use of Azure storage options.
 It consists of the following:
@@ -74,17 +74,6 @@ Create a resource group with the location of your choice. I called mine
 ```
 export GROUP=azure-training
 az group create --name ${GROUP} --location centralus
-{
-  "id": "/subscriptions/e53e9a68-a136-4d2d-a34a-12784eb52234/resourceGroups/azure-training",
-  "location": "centralus",
-  "managedBy": null,
-  "name": "azure-training",
-  "properties": {
-    "provisioningState": "Succeeded"
-  },
-  "tags": {},
-  "type": "Microsoft.Resources/resourceGroups"
-}
 ```
 
 ## Create a Servicebus Namespace
@@ -94,24 +83,6 @@ choice.
 ```
 export NAMESPACE=rivers
 az servicebus namespace create --resource-group ${GROUP}  --name ${NAMESPACE}
-{
-  "createdAt": "2019-10-12T14:06:15.893000+00:00",
-  "id": "/subscriptions/e53e9a68-a136-4d2d-a34a-12784eb52234/resourceGroups/azure-training/providers/Microsoft.ServiceBus/namespaces/rivers",
-  "location": "Central US",
-  "metricId": "e53e9a68-a136-4d2d-a34a-12784eb52234:rivers",
-  "name": "rivers",
-  "provisioningState": "Succeeded",
-  "resourceGroup": "azure-training",
-  "serviceBusEndpoint": "https://rivers.servicebus.windows.net:443/",
-  "sku": {
-    "capacity": null,
-    "name": "Standard",
-    "tier": "Standard"
-  },
-  "tags": {},
-  "type": "Microsoft.ServiceBus/Namespaces",
-  "updatedAt": "2019-10-12T14:07:00.140000+00:00"
-}
 ```
 
 ## Create a Servicebus Topic
@@ -121,35 +92,6 @@ export RIVERS_TOPIC=RiverObservationsTopic
 az servicebus topic create --resource-group ${GROUP} \
     --namespace-name ${NAMESPACE} \
     --name ${RIVERS_TOPIC}
-{
-  "accessedAt": "0001-01-01T00:00:00",
-  "autoDeleteOnIdle": "10675199 days, 2:48:05.477581",
-  "countDetails": {
-    "activeMessageCount": 0,
-    "deadLetterMessageCount": 0,
-    "scheduledMessageCount": 0,
-    "transferDeadLetterMessageCount": 0,
-    "transferMessageCount": 0
-  },
-  "createdAt": "2019-10-12T15:50:38.710000+00:00",
-  "defaultMessageTimeToLive": "10675199 days, 2:48:05.477581",
-  "duplicateDetectionHistoryTimeWindow": "0:10:00",
-  "enableBatchedOperations": true,
-  "enableExpress": false,
-  "enablePartitioning": false,
-  "id": "/subscriptions/e53e9a68-a136-4d2d-a34a-12784eb52234/resourceGroups/azure-training/providers/Microsoft.ServiceBus/namespaces/rivers/topics/RiverObservationsTopic",
-  "location": "Central US",
-  "maxSizeInMegabytes": 5120,
-  "name": "RiverObservationsTopic",
-  "requiresDuplicateDetection": false,
-  "resourceGroup": "azure-training",
-  "sizeInBytes": 0,
-  "status": "Active",
-  "subscriptionCount": 0,
-  "supportOrdering": true,
-  "type": "Microsoft.ServiceBus/Namespaces/Topics",
-  "updatedAt": "2019-10-12T15:50:38.753000+00:00"
-}
 ```
 
 ## Create a Topic Subscription
@@ -158,36 +100,6 @@ Create a subscription to the top.
 az servicebus topic subscription create --resource-group ${GROUP}  \
     --namespace-name ${NAMESPACE} --topic-name ${RIVERS_TOPIC} \
     --name FloodMonitoring
-{
-  "accessedAt": "0001-01-01T00:00:00",
-  "autoDeleteOnIdle": "10675199 days, 2:48:05.477581",
-  "countDetails": {
-    "activeMessageCount": 0,
-    "deadLetterMessageCount": 0,
-    "scheduledMessageCount": 0,
-    "transferDeadLetterMessageCount": 0,
-    "transferMessageCount": 0
-  },
-  "createdAt": "2019-10-12T16:03:01.478495+00:00",
-  "deadLetteringOnFilterEvaluationExceptions": true,
-  "deadLetteringOnMessageExpiration": false,
-  "defaultMessageTimeToLive": "10675199 days, 2:48:05.477581",
-  "duplicateDetectionHistoryTimeWindow": null,
-  "enableBatchedOperations": true,
-  "forwardDeadLetteredMessagesTo": null,
-  "forwardTo": null,
-  "id": "/subscriptions/e53e9a68-a136-4d2d-a34a-12784eb52234/resourceGroups/azure-training/providers/Microsoft.ServiceBus/namespaces/rivers/topics/RiverObservationsTopic/subscriptions/FloodMonitoring",
-  "location": "Central US",
-  "lockDuration": "0:01:00",
-  "maxDeliveryCount": 10,
-  "messageCount": 0,
-  "name": "FloodMonitoring",
-  "requiresSession": false,
-  "resourceGroup": "azure-training",
-  "status": "Active",
-  "type": "Microsoft.ServiceBus/Namespaces/Topics/Subscriptions",
-  "updatedAt": "2019-10-12T16:03:01.478495+00:00"
-}
 ```
 
 ## Create the Authorization rules

@@ -1,0 +1,7 @@
+spring:
+  jms:
+    servicebus:
+      connection-string: "Endpoint=sb://rivers.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=B0B1lAicVuOaq2SCC4+EE2xYwonYn8Wl80eIycG0jfY="
+      idle-timeout: 1800000
+      topic-client-id: riverobservationstopic
+
