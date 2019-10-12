@@ -1,0 +1,9 @@
+channels: [{
+  "title" : "LEVK1 Missouri River at Leavenworth (Kansas)",
+  "description" : "Current Hydrologic Observations for Kansas provided by the National Weather Service - Advanced Hydrologic Prediction Service",
+  "item" : {
+    "title" : "Minor (20.2 ft) - Observation - LEVK1 - Missouri River at Leavenworth (Kansas)",
+    "description" : "{{body}}"
+
+  }
+}]

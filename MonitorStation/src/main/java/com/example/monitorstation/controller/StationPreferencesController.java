@@ -1,0 +1,48 @@
+package com.example.monitorstation.controller;
+
+import com.example.monitorstation.domain.Observation;
+import com.example.monitorstation.domain.StationPreferences;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/stationPreferences")
+public class StationPreferencesController {
+
+    private final StationPreferences stationPreferences;
+
+    @Autowired
+    public StationPreferencesController(
+            final StationPreferences stationPreferences,
+            final Observation lastObservation) {
+        this.stationPreferences = stationPreferences;
+    }
+
+    @PutMapping
+    public StationPreferences updateStationPreferences(@RequestBody final StationPreferences updates) {
+        if (updates.getStationId() != null) {
+            stationPreferences.setStationId(updates.getStationId());
+        }
+        if (updates.getName() != null) {
+            stationPreferences.setName(updates.getName());
+        }
+        if (updates.getGatewayUrl() != null) {
+            stationPreferences.setGatewayUrl(updates.getGatewayUrl());
+        }
+        if (updates.getIncrementValue() != null) {
+            stationPreferences.setIncrementValue(updates.getIncrementValue());
+        }
+        if (updates.getLat() != null) {
+            stationPreferences.setLat(updates.getLat());
+        }
+        if (updates.getLon() != null) {
+            stationPreferences.setLon(updates.getLon());
+        }
+        return stationPreferences;
+    }
+
+    @GetMapping
+    public StationPreferences getStationPreferences() {
+        return this.stationPreferences;
+    }
+}
