@@ -4,4 +4,19 @@ spring:
       connection-string: "Endpoint=sb://rivers.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=B0B1lAicVuOaq2SCC4+EE2xYwonYn8Wl80eIycG0jfY="
       idle-timeout: 1800000
       topic-client-id: riverobservationstopic
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
+    show-sql: true
+
+  datasource:
+    url: jdbc:sqlserver://river-db-server-d67a0585ebe.database.windows.net:1433;database=river-db-server;user=ServerAdmin@river-db-server-d67a0585ebe;password=+5a5sWZNx3EKBrEsPp9hyg==;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: FloodWarningService
+    password: AYcsiy40R8a3uIP7let/mw==
 

@@ -4,3 +4,6 @@ spring:
       connection-string: "Endpoint=sb://rivers.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=B0B1lAicVuOaq2SCC4+EE2xYwonYn8Wl80eIycG0jfY="
       idle-timeout: 1800000
       topic-client-id: riverobservationstopic
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
