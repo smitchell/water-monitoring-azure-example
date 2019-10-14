@@ -19,9 +19,9 @@ public class SurfaceWaterMonitorPoint implements Serializable {
     private String name;
     @Column(name="station_id", unique=true)
     private String stationId;
-    private int floodMinor;
-    private int floodModerate;
-    private int floodMajor;
+    private BigDecimal floodMinor;
+    private BigDecimal floodModerate;
+    private BigDecimal floodMajor;
     private BigDecimal lat;
     private BigDecimal lon;
 }

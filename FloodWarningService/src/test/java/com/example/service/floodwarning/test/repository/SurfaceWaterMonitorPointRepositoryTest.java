@@ -2,6 +2,7 @@ package com.example.service.floodwarning.test.repository;
 
 import com.example.service.floodwarning.domain.SurfaceWaterMonitorPoint;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
+import com.example.service.floodwarning.test.TestHelper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ public class SurfaceWaterMonitorPointRepositoryTest {
 
     @Test
     public void testCreateSurfaceWaterMonitorPoint() {
-        final SurfaceWaterMonitorPoint surfaceWaterMonitorPoint = generateSurfaceWaterMonitorPoint();
+        final SurfaceWaterMonitorPoint surfaceWaterMonitorPoint = TestHelper.generateSurfaceWaterMonitorPoint();
         SurfaceWaterMonitorPoint savedEntity = surfaceWaterMonitorPointRepository.save(surfaceWaterMonitorPoint);
         assertThat(savedEntity, notNullValue());
         assertThat(savedEntity.getId(), notNullValue());
@@ -39,7 +40,7 @@ public class SurfaceWaterMonitorPointRepositoryTest {
 
     @Test
     public void testGetSurfaceWaterMonitorPoint() {
-        final SurfaceWaterMonitorPoint surfaceWaterMonitorPoint = generateSurfaceWaterMonitorPoint();
+        final SurfaceWaterMonitorPoint surfaceWaterMonitorPoint = TestHelper.generateSurfaceWaterMonitorPoint();
         SurfaceWaterMonitorPoint savedEntity = surfaceWaterMonitorPointRepository.save(surfaceWaterMonitorPoint);
         Optional<SurfaceWaterMonitorPoint> optional = surfaceWaterMonitorPointRepository.findById(savedEntity.getId());
         assertThat(optional, notNullValue());
@@ -49,7 +50,7 @@ public class SurfaceWaterMonitorPointRepositoryTest {
 
     @Test
     public void testFindSurfaceWaterMonitorPointByStationId() {
-        final SurfaceWaterMonitorPoint surfaceWaterMonitorPoint = generateSurfaceWaterMonitorPoint();
+        final SurfaceWaterMonitorPoint surfaceWaterMonitorPoint = TestHelper.generateSurfaceWaterMonitorPoint();
         SurfaceWaterMonitorPoint savedEntity = surfaceWaterMonitorPointRepository.save(surfaceWaterMonitorPoint);
 
         Optional<SurfaceWaterMonitorPoint> optional = surfaceWaterMonitorPointRepository.findByStationId(savedEntity.getStationId());
@@ -58,15 +59,5 @@ public class SurfaceWaterMonitorPointRepositoryTest {
 
     }
 
-    private SurfaceWaterMonitorPoint generateSurfaceWaterMonitorPoint() {
-        final SurfaceWaterMonitorPoint surfaceWaterMonitorPoint = new SurfaceWaterMonitorPoint();
-        surfaceWaterMonitorPoint.setName(RandomStringUtils.randomAlphabetic(50));
-        surfaceWaterMonitorPoint.setStationId(RandomStringUtils.randomAlphabetic(10));
-        surfaceWaterMonitorPoint.setFloodMinor(20);
-        surfaceWaterMonitorPoint.setFloodModerate(24);
-        surfaceWaterMonitorPoint.setFloodMajor(30);
-        surfaceWaterMonitorPoint.setLat(BigDecimal.valueOf(39.326944).setScale(6, RoundingMode.HALF_UP));
-        surfaceWaterMonitorPoint.setLon(BigDecimal.valueOf(-94.909444).setScale(6, RoundingMode.HALF_UP));
-        return surfaceWaterMonitorPoint;
-    }
+
 }

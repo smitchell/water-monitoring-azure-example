@@ -53,6 +53,8 @@ public class AppConfig {
         stationPreferences().setSeedWaterFlow(seedWaterFlow);
         stationPreferences().setIncrementValue(BigDecimal.valueOf(incrementValue).setScale(1, RoundingMode.HALF_UP));
         stationPreferences().setGatewayUrl(gatewayUrl);
+        stationPreferences().setLat(BigDecimal.valueOf(lat).setScale(6, RoundingMode.HALF_UP));
+        stationPreferences().setLon(BigDecimal.valueOf(lon).setScale(6, RoundingMode.HALF_UP));
         lastObservation().setStationId(stationId);
         lastObservation().setWaterLevel(BigDecimal.valueOf(seedWaterLevel).setScale(2, RoundingMode.HALF_UP));
         lastObservation().setWaterFlow(seedWaterFlow);
