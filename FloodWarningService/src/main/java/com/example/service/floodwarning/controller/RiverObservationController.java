@@ -78,7 +78,7 @@ public class RiverObservationController {
         floodAdvisory.setAdvisoryEndTime(cal.getTime());
         cal.add(Calendar.HOUR, 2);
         floodAdvisory.setAdvisoryEndTime(cal.getTime());
-        floodAdvisory.setDescription(String.format("A %s flood advisory has been issued for %s", floodAdvisoryType.name(), surfaceWaterMonitorPoint.getName()));
+        floodAdvisory.setDescription(String.format("%s (%s ft) - Observation - %s", floodAdvisoryType.name(), observation.getWaterLevel(), surfaceWaterMonitorPoint.getName()));
         floodAdvisory.setSurfaceWaterMonitorPoint(surfaceWaterMonitorPoint);
         return floodAdvisory;
     }

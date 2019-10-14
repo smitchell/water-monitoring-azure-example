@@ -1,3 +1,7 @@
+azure:
+  storage:
+    connection-string: "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=rivermonitorstorage;AccountKey=LomrxHT0CaAg8Pd0R9rQIYSRXDt9ulPeGaH081CksaAf1MxyO2GT7WVdXzatRRUyfxlfxn3fuPsjOR5O87IPxg=="
+
 spring:
   jms:
     servicebus:
