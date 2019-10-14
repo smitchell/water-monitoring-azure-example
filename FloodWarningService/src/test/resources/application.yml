@@ -1,14 +1,14 @@
 
 azure:
   storage:
-    connection-string: DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=rivermonitorstorage;AccountKey=LomrxHT0CaAg8Pd0R9rQIYSRXDt9ulPeGaH081CksaAf1MxyO2GT7WVdXzatRRUyfxlfxn3fuPsjOR5O87IPxg==
+    connection-string: ***
     account-name: rivermonitorstorage
-    account-key: LomrxHT0CaAg8Pd0R9rQIYSRXDt9ulPeGaH081CksaAf1MxyO2GT7WVdXzatRRUyfxlfxn3fuPsjOR5O87IPxg==
+    account-key: ***
 
 spring:
   jms:
     servicebus:
-      connection-string: Endpoint=sb://rivers.servicebus.windows.net/;SharedAccessKeyName=ReadWrite;SharedAccessKey=B0B1lAicVuOaq2SCC4+EE2xYwonYn8Wl80eIycG0jfY=
+      connection-string: ***
       idle-timeout: 1800000
       topic-client-id: riverobservationstopic
   datasource:
