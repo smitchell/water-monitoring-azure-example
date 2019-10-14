@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Base64;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -70,5 +73,11 @@ public class SimulatorTest {
         assertThat(observation.getLon(), is(equalTo(stationPreferences.getLon())));
         assertThat(observation.getWaterFlow(), is(equalTo(stationPreferences.getSeedWaterFlow())));
         assertThat(observation.getWaterLevel(), is(equalTo(lastObservation.getWaterLevel().add(stationPreferences.getIncrementValue()).setScale(2, RoundingMode.HALF_UP))));
+    }
+
+    @Test
+    public void testLoadBase64Photo() {
+        String base64 = simulator.loadBase64Photo("/R-1-downstream.jpg");
+        assertThat(base64, notNullValue());
     }
 }
