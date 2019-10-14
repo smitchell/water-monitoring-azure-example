@@ -1,14 +1,16 @@
 # Azure Water Monitoring System
 
-The purpose of this example is to demonstrate the use of Azure storage options.
-It consists of the following:
-1) Monitoring Station
-2) Flood Warning Service
-3) Notification Service
-4) API Gateway
+The goal of this project is to demonstrate multiple Azure technologies, including:
+* Azure Service Bus
+* Azure SQL Database
+* Azure Storage Blobs
 
-For simplicity, there is no security or cloud services.
-Here is brief description of the systems:
+It is a flood warning system that consumes river level measurements from a monitoring station to compute flood advisory notifications.
+It uses event-driven architecture. The heart of the system is a simulator that sends incrementing river level events when the Monitor Station project starts.
+
+![](FloodWarning.png)
+
+I've forgone a gateway, the discovery service, and configuration service to focus on Azure technology. That means that the monitory station publishes directly to Azure and doesn't go through a gateway. There won't be a user interface. When you launch the projects, the events and notifications appear in the projects' console logs.
 
 ## Monitoring Stations
 Uses a sensor to measure river level.
