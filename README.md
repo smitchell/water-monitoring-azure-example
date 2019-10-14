@@ -37,6 +37,9 @@ Uses data collected from monitoring stations to detect flood stage:
 * monitoringStation putMonitoringStations: MonitoringStation monitoringStation
 * StationPreferences getStationPreferences: String stationId
 
+### Events
+* River Advisory Issued
+
 ## Notification Service
 
 ### API
