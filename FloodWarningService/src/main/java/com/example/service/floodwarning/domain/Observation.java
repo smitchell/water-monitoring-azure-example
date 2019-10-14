@@ -23,5 +23,5 @@ public class Observation implements Serializable {
     private Integer waterFlow;
     private BigDecimal lat;
     private BigDecimal lon;
-    private String encodedImage;
+    private String photoUrl;
 }

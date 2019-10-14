@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class RiverObservationControllerTest {
         observation.setWaterLevel(BigDecimal.valueOf(26.80).setScale(2, RoundingMode.HALF_UP));
         observation.setLat(BigDecimal.valueOf(39.326944).setScale(6, RoundingMode.HALF_UP));
         observation.setLon(BigDecimal.valueOf(-94.909444).setScale(6, RoundingMode.HALF_UP));
+        observation.setPhotoUrl("http://nowhere");
         riverObservationEvent = new RiverObservationEvent();
         riverObservationEvent.setEventId("43211f7b-9b41-4df9-99e3-534ea5f80e69");
         riverObservationEvent.setCreatedAt(new Date());
@@ -70,16 +72,17 @@ public class RiverObservationControllerTest {
 
         FloodAdvisory floodAdvisory = new FloodAdvisory();
         floodAdvisory.setId(UUID.randomUUID().toString());
-//        when(floodAdvisoryRepository.save(any(FloodAdvisory.class))).thenReturn(floodAdvisory);
+        when(floodAdvisoryRepository.save(any(FloodAdvisory.class))).thenReturn(floodAdvisory);
         when(surfaceWaterMonitorPointRepository.findByStationId(observation.getStationId())).thenReturn(Optional.of(surfaceWaterMonitorPoint));
-        when(observationRepository.save(observation)).thenReturn(observation);
+        when(observationRepository.save(any(Observation.class))).thenReturn(observation);
         when(observationRepository.findById(observation.getId())).thenReturn(Optional.of(observation));
     }
 
     @Test
     public void testProcessRiverObservation() throws IOException {
         riverObservationController.processProcessRiverObservation(riverObservationEvent);
-        verify(observationRepository, times(1)).save(observation);
+        verify(observationRepository, times(1)).save(any(Observation.class));
+        verify(floodAdvisoryRepository, times(1)).save(any(FloodAdvisory.class));
     }
 
     @Test
@@ -126,7 +129,6 @@ public class RiverObservationControllerTest {
         assertThat(floodAdvisory.getFloodAdvisoryType(), equalTo(FloodAdvisoryType.MINOR));
         assertThat(floodAdvisory.getDescription(), containsString(FloodAdvisoryType.MINOR.name()));
         assertThat(floodAdvisory.getDescription(), containsString(surfaceWaterMonitorPoint.getName()));
-
     }
 
 }

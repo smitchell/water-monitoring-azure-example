@@ -4,6 +4,7 @@ import com.example.service.floodwarning.domain.*;
 import com.example.service.floodwarning.repository.FloodAdvisoryRepository;
 import com.example.service.floodwarning.repository.ObservationRepository;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,9 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -34,8 +37,16 @@ public class RiverObservationController {
     }
 
     public void processProcessRiverObservation(RiverObservationEvent riverObservationEvent) throws IOException {
+        Observation observation = new Observation();
         ObjectMapper objectMapper = new ObjectMapper();
-        Observation observation = objectMapper.readValue(riverObservationEvent.getData(), Observation.class);
+        JsonNode rootNode = objectMapper.readTree(riverObservationEvent.getData());
+        observation.setStationId(rootNode.path("stationId").asText());
+        observation.setTime(new Date(rootNode.path("time").asLong()));
+        observation.setWaterLevel(BigDecimal.valueOf(rootNode.path("waterLevel").asDouble()).setScale(2, RoundingMode.HALF_UP));
+        observation.setWaterFlow(rootNode.path("waterFlow").asInt());
+        observation.setLat(BigDecimal.valueOf(rootNode.path("lat").asDouble()).setScale(6, RoundingMode.HALF_UP));
+        observation.setLon(BigDecimal.valueOf(rootNode.path("lon").asDouble()).setScale(6, RoundingMode.HALF_UP));
+        String encodedPhoto = rootNode.path("encodedImage").asText();
         observationRepository.save(observation);
         Optional<FloodAdvisory> optional = computeFloodAdvisory(observation);
     }
