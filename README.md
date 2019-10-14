@@ -10,7 +10,7 @@ It uses event-driven architecture. The heart of the system is a simulator that s
 
 ![](FloodWarning.png)
 
-I've forgone a gateway, the discovery service, and configuration service to focus on Azure technology. That means that the monitory station publishes directly to Azure and doesn't go through a gateway. There won't be a user interface. When you launch the projects, the events and notifications appear in the projects' console logs.
+I've forgone a gateway, the discovery service, and configuration service to focus on Azure technology. That means that the monitor station publishes directly to Azure and doesn't go through a gateway. There won't be a user interface. When you launch the projects, the events and notifications appear in the projects' console logs.
 
 ## Monitoring Stations
 Uses a sensor to measure river level.
