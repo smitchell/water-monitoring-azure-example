@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/observation")
+@RequestMapping("/api/vi")
 public class ObservationController {
 
     private Observation lastObservation;
@@ -17,7 +17,7 @@ public class ObservationController {
         this.lastObservation = lastObservation;
     }
 
-    @GetMapping
+    @GetMapping("/observation")
     public Observation getLastObservation() {
         return lastObservation;
     }

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/stationPreferences")
+@RequestMapping("/api/v1")
 public class StationPreferencesController {
 
     private final StationPreferences stationPreferences;
@@ -18,7 +18,7 @@ public class StationPreferencesController {
         this.stationPreferences = stationPreferences;
     }
 
-    @PutMapping
+    @PutMapping("/stationPreferences")
     public StationPreferences updateStationPreferences(@RequestBody final StationPreferences updates) {
         if (updates.getStationId() != null) {
             stationPreferences.setStationId(updates.getStationId());
@@ -41,7 +41,7 @@ public class StationPreferencesController {
         return stationPreferences;
     }
 
-    @GetMapping
+    @GetMapping("/stationPreferences")
     public StationPreferences getStationPreferences() {
         return this.stationPreferences;
     }

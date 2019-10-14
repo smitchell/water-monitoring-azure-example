@@ -41,13 +41,13 @@ public class IntegrationTest {
         preferences.setLat(BigDecimal.valueOf(39.099728D).setScale(6, RoundingMode.HALF_UP));
         preferences.setLon(BigDecimal.valueOf(-94.578568D).setScale(6, RoundingMode.HALF_UP));
         String json = new ObjectMapper().writeValueAsString(preferences);
-        mockMvc.perform(put("/stationPreferences")
+        mockMvc.perform(put("/api/v1/stationPreferences")
                 .contentType("application/json;charset=UTF-8")
                 .content(json))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/stationPreferences")
+        mockMvc.perform(get("/api/v1/stationPreferences")
                 .accept("application/json;charset=UTF-8"))
                 .andDo(print())
                 .andExpect(status().isOk())
