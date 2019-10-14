@@ -16,9 +16,8 @@ I've forgone a gateway, the discovery service, and configuration service to focu
 Uses a sensor to measure river level.
 
 ### API
-* PUT void stationPreference: StationPreferences preferences
-* GET StationPreferences stationPreference: void
-* GET Observation observation: void
+* PUT void /api/v1/stationPreferences: StationPreferences
+* GET StationPreferences /api/v1/stationPreferences/{stationId}
 
 ### Events
 * River observation made
@@ -32,19 +31,14 @@ Uses data collected from monitoring stations to detect flood stage:
 * 1 - No Flooding
 * 0 - At or Below Low Water Threshold
 
-### API
-* POST monitoringStation createMonitoringStations: MonitoringStation monitoringStation
-* monitoringStation putMonitoringStations: MonitoringStation monitoringStation
-* StationPreferences getStationPreferences: String stationId
-
 ### Events
 * River Advisory Issued
 
 ## Notification Service
 
 ### API
-* void addRecipient: NotificationPreferences notificationPreferences
-* void removeRecipient: String emailAddress
+* POST void /api/v1/notificationPreferences: NotificationPreferences notificationPreferences
+* DELETE void /api/v1/notificationPreferences/{emailAddress}
 
 ### Events
 * notificationSent
