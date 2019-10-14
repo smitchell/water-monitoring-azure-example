@@ -20,6 +20,9 @@ Uses a sensor to measure river level.
 * GET StationPreferences stationPreference: void
 * GET Observation observation: void
 
+### Events
+* River observation made
+
 ## Flood Warning Service
 Uses data collected from monitoring stations to detect flood stage:
 * 5 - Major Flooding
