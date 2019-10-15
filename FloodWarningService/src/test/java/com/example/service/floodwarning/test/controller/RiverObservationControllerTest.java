@@ -12,18 +12,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.ArgumentMatchers.any;
 import org.mockito.MockitoAnnotations;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -61,7 +61,7 @@ public class RiverObservationControllerTest {
         observation.setWaterLevel(BigDecimal.valueOf(26.80).setScale(2, RoundingMode.HALF_UP));
         observation.setLat(BigDecimal.valueOf(39.326944).setScale(6, RoundingMode.HALF_UP));
         observation.setLon(BigDecimal.valueOf(-94.909444).setScale(6, RoundingMode.HALF_UP));
-        observation.setPhotoUrl("http://nowhere");
+        observation.setImageUrl("http://nowhere");
         riverObservationEvent = new RiverObservationEvent();
         riverObservationEvent.setEventId("43211f7b-9b41-4df9-99e3-534ea5f80e69");
         riverObservationEvent.setCreatedAt(new Date());
@@ -79,7 +79,7 @@ public class RiverObservationControllerTest {
     }
 
     @Test
-    public void testProcessRiverObservation() throws IOException {
+    public void testProcessRiverObservation() throws Exception {
         riverObservationController.processProcessRiverObservation(riverObservationEvent);
         verify(observationRepository, times(1)).save(any(Observation.class));
         verify(floodAdvisoryRepository, times(1)).save(any(FloodAdvisory.class));

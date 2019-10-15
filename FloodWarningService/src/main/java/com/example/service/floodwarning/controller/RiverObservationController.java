@@ -6,24 +6,24 @@ import com.example.service.floodwarning.repository.ObservationRepository;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
-@Service
+@Slf4j
+@Controller
 public class RiverObservationController {
 
     private FloodAdvisoryRepository floodAdvisoryRepository;
-
     private ObservationRepository observationRepository;
-
     private SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository;
 
     @Autowired
@@ -36,19 +36,33 @@ public class RiverObservationController {
         this.surfaceWaterMonitorPointRepository = surfaceWaterMonitorPointRepository;
     }
 
-    public void processProcessRiverObservation(RiverObservationEvent riverObservationEvent) throws IOException {
-        Observation observation = new Observation();
+    public void processProcessRiverObservation(RiverObservationEvent riverObservationEvent) throws Exception {
+        Observation o = new Observation();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(riverObservationEvent.getData());
-        observation.setStationId(rootNode.path("stationId").asText());
-        observation.setTime(new Date(rootNode.path("time").asLong()));
-        observation.setWaterLevel(BigDecimal.valueOf(rootNode.path("waterLevel").asDouble()).setScale(2, RoundingMode.HALF_UP));
-        observation.setWaterFlow(rootNode.path("waterFlow").asInt());
-        observation.setLat(BigDecimal.valueOf(rootNode.path("lat").asDouble()).setScale(6, RoundingMode.HALF_UP));
-        observation.setLon(BigDecimal.valueOf(rootNode.path("lon").asDouble()).setScale(6, RoundingMode.HALF_UP));
-        String encodedPhoto = rootNode.path("encodedImage").asText();
-        observationRepository.save(observation);
-        Optional<FloodAdvisory> optional = computeFloodAdvisory(observation);
+        if (rootNode.hasNonNull("stationId")) {
+            o.setStationId(rootNode.path("stationId").asText());
+        }
+        if (rootNode.hasNonNull("time")) {
+            o.setTime(new Date(rootNode.path("time").asLong()));
+        }
+        if (rootNode.hasNonNull("waterLevel")) {
+            o.setWaterLevel(BigDecimal.valueOf(rootNode.path("waterLevel").asDouble()).setScale(2, RoundingMode.HALF_UP));
+        }
+        if (rootNode.hasNonNull("waterFlow")) {
+            o.setWaterFlow(rootNode.path("waterFlow").asInt());
+        }
+        if (rootNode.hasNonNull("lat")) {
+            o.setLat(BigDecimal.valueOf(rootNode.path("lat").asDouble()).setScale(6, RoundingMode.HALF_UP));
+        }
+        if (rootNode.hasNonNull("lon")) {
+            o.setLon(BigDecimal.valueOf(rootNode.path("lon").asDouble()).setScale(6, RoundingMode.HALF_UP));
+        }
+        if (rootNode.hasNonNull("imageUrl")) {
+            o.setImageUrl(rootNode.path("imageUrl").asText());
+        }
+        observationRepository.save(o);
+        Optional<FloodAdvisory> optional = computeFloodAdvisory(o);
     }
 
     public Optional<FloodAdvisory> computeFloodAdvisory(Observation observation) {

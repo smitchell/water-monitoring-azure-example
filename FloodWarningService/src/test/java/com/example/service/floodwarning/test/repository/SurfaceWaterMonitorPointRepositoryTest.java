@@ -3,16 +3,12 @@ package com.example.service.floodwarning.test.repository;
 import com.example.service.floodwarning.domain.SurfaceWaterMonitorPoint;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
 import com.example.service.floodwarning.test.TestHelper;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;

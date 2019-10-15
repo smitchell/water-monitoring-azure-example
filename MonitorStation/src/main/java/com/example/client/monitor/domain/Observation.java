@@ -15,4 +15,5 @@ public class Observation implements Serializable {
     private BigDecimal lat;
     private BigDecimal lon;
     private String encodedImage;
+    private String imageExtension;
 }

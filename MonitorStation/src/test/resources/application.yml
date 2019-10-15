@@ -1,8 +1,9 @@
 spring:
   jms:
     servicebus:
-      connection-string: ***
+      connection-string: *
       idle-timeout: 1800000
+      topic-client-id: riverobservationstopic
 
 station:
   id: "06820475"

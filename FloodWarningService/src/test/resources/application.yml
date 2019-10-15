@@ -1,14 +1,11 @@
-
 azure:
   storage:
-    connection-string: ***
-    account-name: rivermonitorstorage
-    account-key: ***
+    connection-string: *
 
 spring:
   jms:
     servicebus:
-      connection-string: ***
+      connection-string: *
       idle-timeout: 1800000
       topic-client-id: riverobservationstopic
   datasource:
