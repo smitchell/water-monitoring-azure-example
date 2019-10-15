@@ -6,6 +6,7 @@ spring:
   jms:
     servicebus:
       connection-string: *
+      idle-timeout: 1800000
       topic-client-id: riverobservationstopic
   jpa:
     generate-ddl: true
@@ -19,7 +20,7 @@ spring:
     show-sql: true
 
   datasource:
-    url: jdbc:sqlserver://river-db-server-d67a0585ebe.database.windows.net:1433;database=river-db-server;user=ServerAdmin@river-db-server-d67a0585ebe;password=+5a5sWZNx3EKBrEsPp9hyg==;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    url: jdbc:sqlserver://*
     username: FloodWarningService
     password: *
 
