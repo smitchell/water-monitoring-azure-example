@@ -1,12 +1,21 @@
 package com.example.service.floodwarning.test;
 
 import com.example.service.floodwarning.consumer.RiverObservationConsumer;
+import com.example.service.floodwarning.controller.RiverObservationController;
 import com.example.service.floodwarning.domain.RiverObservationEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.Date;
@@ -17,7 +26,16 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 public class RiverObservationConsumerTest {
 
-    private RiverObservationConsumer riverObservationConsumer = new RiverObservationConsumer();
+    @Mock
+    private RiverObservationController riverObservationController;
+
+    @InjectMocks
+    private RiverObservationConsumer riverObservationConsumer;
+
+    @Before
+    public void runBefore() throws JsonProcessingException {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void testOnMessage() {

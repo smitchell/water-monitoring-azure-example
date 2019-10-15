@@ -4,6 +4,7 @@ import com.example.service.floodwarning.domain.*;
 import com.example.service.floodwarning.repository.FloodAdvisoryRepository;
 import com.example.service.floodwarning.repository.ObservationRepository;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
+import com.example.service.floodwarning.service.StorageService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
+import java.util.Base64;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
@@ -25,15 +26,18 @@ public class RiverObservationController {
     private FloodAdvisoryRepository floodAdvisoryRepository;
     private ObservationRepository observationRepository;
     private SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository;
+    private StorageService storageService;
 
     @Autowired
     public RiverObservationController(
             FloodAdvisoryRepository floodAdvisoryRepository,
             ObservationRepository observationRepository,
-            SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository) {
+            SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository,
+            StorageService storageService) {
         this.floodAdvisoryRepository = floodAdvisoryRepository;
         this.observationRepository = observationRepository;
         this.surfaceWaterMonitorPointRepository = surfaceWaterMonitorPointRepository;
+        this.storageService = storageService;
     }
 
     public void processProcessRiverObservation(RiverObservationEvent riverObservationEvent) throws Exception {
@@ -58,8 +62,14 @@ public class RiverObservationController {
         if (rootNode.hasNonNull("lon")) {
             o.setLon(BigDecimal.valueOf(rootNode.path("lon").asDouble()).setScale(6, RoundingMode.HALF_UP));
         }
-        if (rootNode.hasNonNull("imageUrl")) {
-            o.setImageUrl(rootNode.path("imageUrl").asText());
+        if (rootNode.hasNonNull("encodedImage")) {
+            String encodedImage = rootNode.path("encodedImage").asText();
+            if (rootNode.hasNonNull("imageExtension")) {
+                String imageExtension = rootNode.path("imageExtension").asText();
+                byte[] bytes = Base64.getDecoder().decode(encodedImage);
+                o.setImageUrl(storageService.writeBlobFile(o.getStationId(), bytes, imageExtension));
+                log.info("Photo created: " + o.getImageUrl());
+            }
         }
         observationRepository.save(o);
         Optional<FloodAdvisory> optional = computeFloodAdvisory(o);

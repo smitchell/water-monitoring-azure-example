@@ -21,6 +21,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class StorageService {
+
     private final String containerName = "images";
     private final CloudStorageAccount cloudStorageAccount;
     private final CloudBlobContainer files;
@@ -42,7 +43,8 @@ public class StorageService {
             container = this.cloudStorageAccount
                     .createCloudBlobClient()
                     .getContainerReference(containerName);
-            container.createIfNotExists(BlobContainerPublicAccessType.CONTAINER, new BlobRequestOptions(), new OperationContext());
+            BlobRequestOptions blobRequestOptions = new BlobRequestOptions();
+            container.createIfNotExists(BlobContainerPublicAccessType.BLOB, new BlobRequestOptions(), new OperationContext());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -53,16 +55,15 @@ public class StorageService {
         CloudBlockBlob blockBlobReference = files.getBlockBlobReference(generateBlobName(stationId, new Date(), extension));
         try (InputStream in = new ByteArrayInputStream(bytes)) {
             blockBlobReference.upload(in, bytes.length);
-            ObjectMapper mapper = new ObjectMapper();
-            log.info(mapper.writeValueAsString(blockBlobReference));
             return blockBlobReference.getStorageUri().getPrimaryUri().toString();
         }
     }
 
-    public String generateBlobName(String stationId, Date date, String extension) {
+    private String generateBlobName(String stationId, Date date, String extension) {
         return stationId
                 .concat("/")
                 .concat(UUID.randomUUID().toString())
                 .concat(".").concat(extension);
     }
+
 }

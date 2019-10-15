@@ -53,6 +53,7 @@ public class Simulator {
         observation.setLat(stationPreferences.getLat());
         observation.setLon(stationPreferences.getLon());
         observation.setEncodedImage(loadBase64Photo("/R-1-downstream.jpg"));
+        observation.setImageExtension("jpg");
         if (lastObservation.getWaterLevel() == null) {
             observation.setWaterLevel(stationPreferences.getSeedWaterLevel());
         } else {

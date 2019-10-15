@@ -16,12 +16,9 @@
 
     <properties>
         <java.version>1.8</java.version>
-<!--        This is the last version that included the storage jars -->
-<!--        e.g., com.microsoft.azure.storage.CloudStorageAccount   -->
-        <azure.version>2.0.6</azure.version>
         <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
+        <azure-version>2.1.7</azure-version>
     </properties>
-
 
     <dependencies>
         <dependency>
@@ -43,18 +40,9 @@
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-storage-spring-boot-starter</artifactId>
-<!--            <version>2.0.8</version>-->
+            <artifactId>spring-azure-starter-storage</artifactId>
+            <version>1.0.0.M2</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-spring-boot-starter</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -96,16 +84,15 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-spring-boot-bom</artifactId>
-                <version>${azure.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.microsoft.azure</groupId>-->
+<!--                <artifactId>azure-spring-boot-bom</artifactId>-->
+<!--                <version>${azure-version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
-
 
     <build>
         <plugins>
