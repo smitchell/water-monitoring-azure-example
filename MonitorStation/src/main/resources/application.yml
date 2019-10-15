@@ -6,7 +6,7 @@ spring:
       topic-client-id: riverobservationstopic
 
 station:
-  id: LEVK1;
+  id: LEVK1
   seed-water-level: 25
   seed-water-flow: 100
   increment-value: 0.3

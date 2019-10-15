@@ -1,8 +1,15 @@
-azure:
-  storage:
-    connection-string: *
-
 spring:
+  cloud:
+    azure:
+      credential-file-path: river.azureauth
+      resource-group: azure-training
+      region: Central US
+      storage.account: rivermonitorstorage
+      use-http: true
+  datasource:
+    url: jdbc:sqlserver://*
+    username: FloodWarningService
+    password: *
   jms:
     servicebus:
       connection-string: *
@@ -16,11 +23,3 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
-        format_sql: true
-    show-sql: true
-
-  datasource:
-    url: jdbc:sqlserver://*
-    username: FloodWarningService
-    password: *
-
