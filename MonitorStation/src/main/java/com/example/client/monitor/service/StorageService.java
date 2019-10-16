@@ -1,6 +1,5 @@
-package com.example.service.floodwarning.service;
+package com.example.client.monitor.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.blob.BlobContainerPublicAccessType;

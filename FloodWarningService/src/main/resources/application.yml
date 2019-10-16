@@ -1,13 +1,6 @@
 spring:
-  cloud:
-    azure:
-      credential-file-path: river.azureauth
-      resource-group: azure-training
-      region: Central US
-      storage.account: rivermonitorstorage
-      use-http: true
   datasource:
-    url: jdbc:sqlserver://*
+    url: jdbc:sqlserver:*
     username: FloodWarningService
     password: *
   jms:

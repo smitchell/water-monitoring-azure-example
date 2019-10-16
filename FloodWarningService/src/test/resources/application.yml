@@ -1,10 +1,4 @@
 spring:
-  cloud:
-    azure:
-      credential-file-path: river.azureauth
-      resource-group: azure-training
-      region: Central US
-      storage.account: rivermonitorstorage
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:test;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE

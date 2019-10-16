@@ -12,3 +12,6 @@ target/
 **/.DS_Store
 *.DS_Store
 .DS_Store
+
+/src/test/resources/river.azureauth
+/src/main/resources/river.azureauth

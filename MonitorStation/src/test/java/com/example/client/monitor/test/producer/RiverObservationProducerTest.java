@@ -11,20 +11,15 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 public class RiverObservationProducerTest {
 
@@ -43,8 +38,7 @@ public class RiverObservationProducerTest {
     public void testPublish() throws JsonProcessingException {
         Observation o = new Observation();
         o.setStationId(RandomStringUtils.randomAlphabetic(10));
-        o.setImageExtension("png");
-        o.setEncodedImage(RandomStringUtils.randomAlphabetic(500));
+        o.setImageUrl("http://host/images/image.png");
         o.setWaterFlow(100);
         o.setWaterLevel(BigDecimal.valueOf(25).setScale(2, RoundingMode.HALF_UP));
         o.setLat(BigDecimal.valueOf(34).setScale(6, RoundingMode.HALF_UP));

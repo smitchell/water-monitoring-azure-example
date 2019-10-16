@@ -1,9 +1,20 @@
+server:
+  port: 9999
+
 spring:
+  cloud:
+    azure:
+      credential-file-path: river.azureauth
+      resource-group: azure-training
+      region: Central US
+      storage.account: rivermonitorstorage
+      use-http: true
   jms:
     servicebus:
       connection-string: *
       idle-timeout: 1800000
       topic-client-id: riverobservationstopic
+
 
 station:
   id: LEVK1
