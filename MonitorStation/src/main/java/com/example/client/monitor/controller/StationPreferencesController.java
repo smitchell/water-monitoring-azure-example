@@ -26,8 +26,8 @@ public class StationPreferencesController {
         if (updates.getName() != null) {
             stationPreferences.setName(updates.getName());
         }
-        if (updates.getGatewayUrl() != null) {
-            stationPreferences.setGatewayUrl(updates.getGatewayUrl());
+        if (updates.getIncrementValue() != null) {
+            stationPreferences.setIncrementValue(updates.getIncrementValue());
         }
         if (updates.getIncrementValue() != null) {
             stationPreferences.setIncrementValue(updates.getIncrementValue());

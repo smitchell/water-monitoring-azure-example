@@ -35,7 +35,6 @@ public class SimulatorTest {
     public void runBefore() {
         stationPreferences.setStationId("testStationId");
         stationPreferences.setName("Test Station Name");
-        stationPreferences.setGatewayUrl("http://www.gateway.com");
         stationPreferences.setIncrementValue(BigDecimal.valueOf(1).setScale(1, RoundingMode.HALF_UP));
         stationPreferences.setLat(BigDecimal.valueOf(39.099728D).setScale(6, RoundingMode.HALF_UP));
         stationPreferences.setLon(BigDecimal.valueOf(-94.578568D).setScale(6, RoundingMode.HALF_UP));

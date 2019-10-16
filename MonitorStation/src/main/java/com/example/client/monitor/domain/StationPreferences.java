@@ -10,7 +10,6 @@ public class StationPreferences implements Serializable {
 
     private String stationId;
     private String name;
-    private String gatewayUrl;
     private BigDecimal seedWaterLevel;
     private Integer seedWaterFlow;
     private BigDecimal incrementValue;

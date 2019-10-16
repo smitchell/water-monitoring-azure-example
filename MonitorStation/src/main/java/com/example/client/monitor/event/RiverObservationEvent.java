@@ -11,5 +11,6 @@ public class RiverObservationEvent implements Serializable {
     private Date createdAt;
     private String eventType;
     private String correlationId;
+    private String callbackUrl;
     private String data;
 }

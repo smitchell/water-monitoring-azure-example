@@ -2,17 +2,22 @@ package com.example.client.monitor.config;
 
 import com.example.client.monitor.domain.Observation;
 import com.example.client.monitor.domain.StationPreferences;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
+@Slf4j
 @Configuration
 public class AppConfig {
 
@@ -23,6 +28,7 @@ public class AppConfig {
     private final String gatewayUrl;
     private final double lat;
     private final double lon;
+    private final Environment environment;
 
     @Autowired
     public AppConfig(
@@ -32,7 +38,8 @@ public class AppConfig {
             @Value("${station.increment-value}") final double incrementValue,
             @Value("${station.lat}") final double lat,
             @Value("${station.lon}") final double lon,
-            @Value("${station.gateway-url:null}") final String gatewayUrl
+            @Value("${station.gateway-url:null}") final String gatewayUrl,
+            Environment environment
     ) {
         this.stationId = stationId;
         this.seedWaterLevel = seedWaterLevel;
@@ -41,6 +48,7 @@ public class AppConfig {
         this.gatewayUrl = gatewayUrl;
         this.lat = lat;
         this.lon = lon;
+        this.environment = environment;
     }
 
     @PostConstruct
@@ -52,7 +60,6 @@ public class AppConfig {
         stationPreferences().setSeedWaterLevel(BigDecimal.valueOf(seedWaterLevel).setScale(2, RoundingMode.HALF_UP));
         stationPreferences().setSeedWaterFlow(seedWaterFlow);
         stationPreferences().setIncrementValue(BigDecimal.valueOf(incrementValue).setScale(1, RoundingMode.HALF_UP));
-        stationPreferences().setGatewayUrl(gatewayUrl);
         stationPreferences().setLat(BigDecimal.valueOf(lat).setScale(6, RoundingMode.HALF_UP));
         stationPreferences().setLon(BigDecimal.valueOf(lon).setScale(6, RoundingMode.HALF_UP));
         lastObservation().setStationId(stationId);
@@ -73,8 +80,25 @@ public class AppConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public String callbackUrl() {
+        String callbackUrl = null;
+        try {
+            if( callbackUrl == null ) {
+                // Port
+                String port = environment.getProperty("server.port");
+                // Local address
+                String hostAddress = InetAddress.getLocalHost().getHostAddress();
+//                String hostname = InetAddress.getLocalHost().getHostName();
+                callbackUrl = "http://";
+                if (!"80".equals(port) && !"0".equals(port)) {
+                    callbackUrl = callbackUrl.concat(":").concat(port).concat("/");
+                }
+                callbackUrl = callbackUrl.concat(hostAddress).concat("/api/vi/stationPreferences");
+            }
+        } catch (UnknownHostException e) {
+            log.error(e.getMessage(), e);
+            callbackUrl = "error";
+        }
+        return callbackUrl;
     }
-
 }

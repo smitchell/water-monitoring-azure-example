@@ -30,7 +30,6 @@ public class StationPreferencesControllerTest {
         StationPreferences prefs = new StationPreferences();
         prefs.setStationId("testStationId");
         prefs.setName("Test Station Name");
-        prefs.setGatewayUrl("http://www.gateway.com");
         prefs.setIncrementValue(BigDecimal.valueOf(1).setScale(1, RoundingMode.HALF_UP));
         prefs.setLat(BigDecimal.valueOf(39.099728D).setScale(6, RoundingMode.HALF_UP));
         prefs.setLon(BigDecimal.valueOf(-94.578568D).setScale(6, RoundingMode.HALF_UP));

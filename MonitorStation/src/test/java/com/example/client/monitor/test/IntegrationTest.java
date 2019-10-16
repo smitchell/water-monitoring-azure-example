@@ -36,7 +36,6 @@ public class IntegrationTest {
         StationPreferences preferences = new StationPreferences();
         preferences.setStationId("An Id");
         preferences.setName("A Name");
-        preferences.setGatewayUrl("http://www.gateway.com");
         preferences.setIncrementValue(BigDecimal.valueOf(1).setScale(1, RoundingMode.HALF_UP));
         preferences.setLat(BigDecimal.valueOf(39.099728D).setScale(6, RoundingMode.HALF_UP));
         preferences.setLon(BigDecimal.valueOf(-94.578568D).setScale(6, RoundingMode.HALF_UP));
@@ -52,7 +51,6 @@ public class IntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.stationId").value(equalTo(preferences.getStationId())))
-                .andExpect(jsonPath("$.name").value(equalTo(preferences.getName())))
-                .andExpect(jsonPath("$.gatewayUrl").value(equalTo(preferences.getGatewayUrl())));
+                .andExpect(jsonPath("$.name").value(equalTo(preferences.getName())));
     }
 }
