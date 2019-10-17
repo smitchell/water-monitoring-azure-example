@@ -29,7 +29,7 @@ public class RiverObservationConsumer {
     public void onMessage(Message<String> msg) {
         try {
             RiverObservationEvent event = parseRiverObservationMessage(msg);
-            log.info("onMessage: " + event);
+            log.debug("onMessage: " + event);
             riverObservationController.processProcessRiverObservation(event);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -37,7 +37,6 @@ public class RiverObservationConsumer {
     }
 
     public RiverObservationEvent parseRiverObservationMessage(Message<String> msg) throws IOException {
-        log.info("Message headers: " + msg.getHeaders());
         RiverObservationEvent event = null;
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(msg.getPayload(), RiverObservationEvent.class);

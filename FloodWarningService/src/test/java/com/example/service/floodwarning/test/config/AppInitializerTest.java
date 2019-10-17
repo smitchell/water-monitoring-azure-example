@@ -1,7 +1,9 @@
 package com.example.service.floodwarning.test.config;
 
 import com.example.service.floodwarning.config.AppInitializer;
+import com.example.service.floodwarning.domain.FloodAdvisory;
 import com.example.service.floodwarning.domain.SurfaceWaterMonitorPoint;
+import com.example.service.floodwarning.repository.FloodAdvisoryRepository;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.service.floodwarning.config.AppInitializer.STATION_ID;
@@ -23,10 +26,14 @@ public class AppInitializerTest {
     private SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository;
 
     @Autowired
+    private FloodAdvisoryRepository floodAdvisoryRepository;
+
+    @Autowired
     private AppInitializer appInitializer;
 
     @Test
     public void testInitialize() {
+        floodAdvisoryRepository.deleteAll();
         Optional<SurfaceWaterMonitorPoint> optional = surfaceWaterMonitorPointRepository.findByStationId(STATION_ID);
         optional.ifPresent(surfaceWaterMonitorPoint -> surfaceWaterMonitorPointRepository.delete(surfaceWaterMonitorPoint));
         appInitializer.initialize();

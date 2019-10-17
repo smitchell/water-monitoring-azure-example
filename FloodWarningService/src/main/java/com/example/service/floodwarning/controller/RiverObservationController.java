@@ -1,6 +1,10 @@
 package com.example.service.floodwarning.controller;
 
-import com.example.service.floodwarning.domain.*;
+import com.example.service.floodwarning.config.AppInitializer;
+import com.example.service.floodwarning.domain.FloodAdvisory;
+import com.example.service.floodwarning.domain.Observation;
+import com.example.service.floodwarning.domain.RiverObservationEvent;
+import com.example.service.floodwarning.domain.SurfaceWaterMonitorPoint;
 import com.example.service.floodwarning.repository.FloodAdvisoryRepository;
 import com.example.service.floodwarning.repository.ObservationRepository;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
@@ -11,25 +15,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Controller
 public class RiverObservationController {
 
-    private FloodAdvisoryRepository floodAdvisoryRepository;
-    private ObservationRepository observationRepository;
-    private SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository;
+    private final FloodAdvisoryRepository floodAdvisoryRepository;
+    private final ObservationRepository observationRepository;
+    private final SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository;
 
     @Autowired
     public RiverObservationController(
-            FloodAdvisoryRepository floodAdvisoryRepository,
-            ObservationRepository observationRepository,
-            SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository) {
+            final FloodAdvisoryRepository floodAdvisoryRepository,
+            final ObservationRepository observationRepository,
+            final SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository) {
         this.floodAdvisoryRepository = floodAdvisoryRepository;
         this.observationRepository = observationRepository;
         this.surfaceWaterMonitorPointRepository = surfaceWaterMonitorPointRepository;
@@ -62,38 +68,67 @@ public class RiverObservationController {
         }
         observationRepository.save(o);
         Optional<FloodAdvisory> optional = computeFloodAdvisory(o);
+        if (optional.isPresent()) {
+            FloodAdvisory advisory = optional.get();
+            log.warn(advisory.getFloodAdvisoryType().concat(" FLOOD ADVISORY: ".concat(advisory.toString())));
+        }
     }
 
-    public Optional<FloodAdvisory> computeFloodAdvisory(Observation observation) {
+    public Optional<FloodAdvisory> computeFloodAdvisory(Observation observation) throws Exception {
         Optional<SurfaceWaterMonitorPoint> optional = surfaceWaterMonitorPointRepository.findByStationId(observation.getStationId());
         Assert.isTrue(optional.isPresent(), "Surface Water Monitor Point not found " + observation.getStationId());
         SurfaceWaterMonitorPoint surfaceWaterMonitorPoint = optional.get();
         FloodAdvisory floodAdvisory = null;
         if (surfaceWaterMonitorPoint.getFloodMajor().compareTo(observation.getWaterLevel()) < 0) {
-            floodAdvisory = generateFloodAdvisory(FloodAdvisoryType.MAJOR, observation, surfaceWaterMonitorPoint);
+            floodAdvisory = generateFloodAdvisory(FloodAdvisory.TYPE_MAJOR, observation, surfaceWaterMonitorPoint);
         } else if (surfaceWaterMonitorPoint.getFloodModerate().compareTo(observation.getWaterLevel()) < 0) {
-            floodAdvisory = generateFloodAdvisory(FloodAdvisoryType.MODERATE, observation, surfaceWaterMonitorPoint);
+            floodAdvisory = generateFloodAdvisory(FloodAdvisory.TYPE_MODERATE, observation, surfaceWaterMonitorPoint);
         } else if (surfaceWaterMonitorPoint.getFloodMinor().compareTo(observation.getWaterLevel()) < 0) {
-            floodAdvisory = generateFloodAdvisory(FloodAdvisoryType.MINOR, observation, surfaceWaterMonitorPoint);
+            floodAdvisory = generateFloodAdvisory(FloodAdvisory.TYPE_MINOR, observation, surfaceWaterMonitorPoint);
         }
-        if (floodAdvisory == null) {
+
+        // Check for an existing flood advisory
+        List<FloodAdvisory> activeFloodAdvisories =
+                floodAdvisoryRepository.findBySurfaceWaterMonitorPointStationIdAndFloodAdvisoryStatusOrderByAdvisoryStartTimeDesc(
+                        observation.getStationId(), FloodAdvisory.STATUS_ACTIVE);
+        boolean existingFloodAdvisory = false;
+        if (!activeFloodAdvisories.isEmpty()) {
+            for (FloodAdvisory activeFloodAdvisory : activeFloodAdvisories) {
+                if (floodAdvisory != null && activeFloodAdvisory.getFloodAdvisoryType().equals(floodAdvisory.getFloodAdvisoryType())) {
+                    existingFloodAdvisory = true;
+                    // If the existing advisory is the same advisory type and hasn't expired, don't publish a new one.
+                    activeFloodAdvisory.setAdvisoryEndTime(floodAdvisory.getAdvisoryEndTime());
+                    floodAdvisoryRepository.save(activeFloodAdvisory);
+                } else {
+                    // If floodAdvisory is null or the existing advisory is for a different advisory type, expire it.
+                    activeFloodAdvisory.setAdvisoryEndTime(new Date());
+                    activeFloodAdvisory.setFloodAdvisoryStatus(FloodAdvisory.STATUS_EXPIRED);
+                    floodAdvisoryRepository.save(activeFloodAdvisory);
+                    if (floodAdvisory == null) {
+                        log.info(String.format("Flood advisory (%S) cleared.", activeFloodAdvisory.getFloodAdvisoryType()));
+                    }
+                }
+            }
+        }
+        if (existingFloodAdvisory || floodAdvisory == null) {
             return Optional.empty();
-        } else {
-            floodAdvisoryRepository.save(floodAdvisory);
         }
-        return Optional.of(floodAdvisory);
+        return Optional.of(floodAdvisoryRepository.save(floodAdvisory));
     }
 
-    public FloodAdvisory generateFloodAdvisory(FloodAdvisoryType floodAdvisoryType, Observation observation, SurfaceWaterMonitorPoint surfaceWaterMonitorPoint) {
+    public FloodAdvisory generateFloodAdvisory(String floodAdvisoryType, Observation observation, SurfaceWaterMonitorPoint surfaceWaterMonitorPoint) {
         FloodAdvisory floodAdvisory = new FloodAdvisory();
+        floodAdvisory.setStationId(surfaceWaterMonitorPoint.getStationId());
         floodAdvisory.setFloodAdvisoryType(floodAdvisoryType);
+        floodAdvisory.setFloodAdvisoryStatus("ACTIVE");
+        floodAdvisory.setAdvisoryStartTime(new Date());
         Calendar cal = Calendar.getInstance();
-        floodAdvisory.setAdvisoryEndTime(cal.getTime());
         cal.add(Calendar.HOUR, 2);
         floodAdvisory.setAdvisoryEndTime(cal.getTime());
-        floodAdvisory.setDescription(String.format("%s (%s ft) - Observation - %s", floodAdvisoryType.name(), observation.getWaterLevel(), surfaceWaterMonitorPoint.getName()));
+        floodAdvisory.setDescription(String.format("%s (%s ft) - Observation - %s", floodAdvisoryType, observation.getWaterLevel(), surfaceWaterMonitorPoint.getName()));
         floodAdvisory.setSurfaceWaterMonitorPoint(surfaceWaterMonitorPoint);
         return floodAdvisory;
     }
+
 }
 

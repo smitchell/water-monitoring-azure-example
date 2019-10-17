@@ -31,6 +31,9 @@ public class IntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private StationPreferences stationPreferences;
+
     @Test
     public void testSimulationPreferences() throws Exception {
         StationPreferences preferences = new StationPreferences();

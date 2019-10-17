@@ -9,7 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -17,8 +17,8 @@ import java.io.InputStream;
 import java.util.Date;
 
 @Slf4j
-@Component
-public class Simulator {
+@Controller
+public class SimulatorController {
 
     private final StationPreferences stationPreferences;
     private final Observation lastObservation;
@@ -26,7 +26,7 @@ public class Simulator {
     private final StorageService storageService;
 
     @Autowired
-    public Simulator(
+    public SimulatorController(
             final StationPreferences stationPreferences,
             final Observation lastObservation,
             final RiverObservationProducer riverObservationProducer,
@@ -41,7 +41,7 @@ public class Simulator {
     /**
      * Use initial detail so as not to interfere with tests
      */
-    @Scheduled(fixedRate = 5000, initialDelay = 10000)
+    @Scheduled(fixedRate = 2000, initialDelay = 10000)
     public void simulateMeasurement() throws Exception {
         BeanUtils.copyProperties(incrementWaterLevel(), lastObservation);
         riverObservationProducer.publish(lastObservation);
@@ -69,10 +69,23 @@ public class Simulator {
         } else {
             observation.setWaterFlow(lastObservation.getWaterFlow());
         }
+        keepSimulationInBounds(observation);
         return observation;
     }
 
-    public byte[] loadImageBytes(String photoPath) {
+    /**
+     * If the river level falls below the initial seed level or rises above the maximum level,
+     * negate the increment value to keep the simulation in bounds.
+     * @param observation - The observation to be compared to bounds.
+     */
+    public void keepSimulationInBounds(Observation observation) {
+        if (observation.getWaterLevel().compareTo(stationPreferences.getSeedWaterLevel()) < 0
+                || observation.getWaterLevel().compareTo(stationPreferences.getMaxWaterLevel()) > 0) {
+            stationPreferences.setIncrementValue(stationPreferences.getIncrementValue().negate());
+        }
+    }
+
+    private byte[] loadImageBytes(String photoPath) {
         try {
             InputStream in = getClass()
                     .getResourceAsStream(photoPath);

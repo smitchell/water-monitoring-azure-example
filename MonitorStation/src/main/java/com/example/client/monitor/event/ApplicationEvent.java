@@ -6,11 +6,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class RiverObservationEvent implements Serializable {
+public class ApplicationEvent implements Serializable {
     private String eventId;
     private Date createdAt;
     private String eventType;
     private String correlationId;
-    private String callbackUrl;
     private String data;
 }

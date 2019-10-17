@@ -13,6 +13,7 @@ public class StationPreferences implements Serializable {
     private BigDecimal seedWaterLevel;
     private Integer seedWaterFlow;
     private BigDecimal incrementValue;
+    private BigDecimal maxWaterLevel;
     private BigDecimal lat;
     private BigDecimal lon;
 

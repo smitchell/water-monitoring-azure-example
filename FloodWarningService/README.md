@@ -15,7 +15,7 @@ This project needs to do several things.
 * Write the observations to a database.
 * Publish alerts to a Service Bus Topic.
 
-## Create a Topic Subscription
+## Create a Topic Subscription for River Observations
 Create a subscription to the top.
 
 ```
@@ -23,6 +23,16 @@ az servicebus topic subscription create --resource-group ${GROUP}  \
     --namespace-name ${NAMESPACE} --topic-name ${RIVERS_TOPIC} \
     --name FloodMonitoring
 ```
+
+## Create a Service Bus Topic to Publish Flood Advisories
+Create a topic for the flood advisory events. For this exercise it is called "FloodAdvisoryTopic".
+```
+export FLOOD_ADVISORY_TOPIC=FloodAdvisoryTopic
+az servicebus topic create --resource-group ${GROUP} \
+    --namespace-name ${NAMESPACE} \
+    --name ${FLOOD_ADVISORY_TOPIC}
+```
+
 
 ## Create the SQL Server
 
@@ -52,20 +62,3 @@ CREATE USER FloodWarningService FROM LOGIN FloodWarningService;
 ALTER ROLE [db_owner] ADD MEMBER [FloodWarningService];
 ```
 
-## Create an Azure Storage Account
-
-The project requires a Storage account in order to store river photos from the monitor stations. It uses BLOB storage.
-```
-export STORAGE_NAME=rivermonitorstorage
-az storage account create \
-  --resource-group $GROUP \
-  --kind StorageV2 \
-  --name $STORAGE_NAME \
-  --location centralus
-```   
-
-Get the access keys for your storage account:
-
-```
-az storage account show-connection-string --name $STORAGE_NAME  --resource-group $GROUP
-```

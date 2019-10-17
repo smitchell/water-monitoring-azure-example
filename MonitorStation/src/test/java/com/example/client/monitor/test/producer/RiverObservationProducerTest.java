@@ -1,7 +1,7 @@
 package com.example.client.monitor.test.producer;
 
 import com.example.client.monitor.domain.Observation;
-import com.example.client.monitor.event.RiverObservationEvent;
+import com.example.client.monitor.event.ApplicationEvent;
 import com.example.client.monitor.producer.RiverObservationProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,7 +44,7 @@ public class RiverObservationProducerTest {
         o.setLat(BigDecimal.valueOf(34).setScale(6, RoundingMode.HALF_UP));
         o.setLon(BigDecimal.valueOf(-94).setScale(6, RoundingMode.HALF_UP));
         o.setTime(new Date());
-        RiverObservationEvent event = riverObservationProducer.publish(o);
+        ApplicationEvent event = riverObservationProducer.publish(o);
 
         assertThat(event, notNullValue());
         assertThat(event.getEventId(), notNullValue());

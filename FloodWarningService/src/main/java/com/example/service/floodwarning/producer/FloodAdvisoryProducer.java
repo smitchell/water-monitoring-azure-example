@@ -1,7 +1,7 @@
-package com.example.client.monitor.producer;
+package com.example.service.floodwarning.producer;
 
-import com.example.client.monitor.domain.Observation;
-import com.example.client.monitor.event.ApplicationEvent;
+import com.example.service.floodwarning.domain.FloodAdvisory;
+import com.example.service.floodwarning.event.ApplicationEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -13,26 +13,25 @@ import java.util.UUID;
 
 @Slf4j
 @Component
-public class RiverObservationProducer {
-    public static final String DESTINATION_NAME = "riverobservationstopic";
-    public static final String EVENT_TYPE = "SURFACE_WATER_OBSERVATION";
+public class FloodAdvisoryProducer {
+    public static final String DESTINATION_NAME = "floodadvisorytopic";
+    public static final String EVENT_TYPE = "FLOOD_ADVISORY";
 
     private JmsTemplate jmsTemplate;
 
     @Autowired
-    public RiverObservationProducer(JmsTemplate jmsTemplate) {
+    public FloodAdvisoryProducer(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
 
-
-    public ApplicationEvent publish(Observation observation) throws JsonProcessingException {
+    public ApplicationEvent publish(FloodAdvisory floodAdvisory) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         ApplicationEvent event = new ApplicationEvent();
         event.setEventId(UUID.randomUUID().toString());
-        event.setCorrelationId(observation.getStationId());
-        event.setCreatedAt(observation.getTime());
+        event.setCorrelationId(floodAdvisory.getSurfaceWaterMonitorPoint().getStationId());
+        event.setCreatedAt(floodAdvisory.getAdvisoryStartTime());
         event.setEventType(EVENT_TYPE);
-        event.setData(mapper.writeValueAsString(observation));
+        event.setData(mapper.writeValueAsString(floodAdvisory));
         log.info(event.getEventId() + ": " + event.getData());
         String msg = mapper.writeValueAsString(event);
         jmsTemplate.send(DESTINATION_NAME, session -> session.createTextMessage(msg));

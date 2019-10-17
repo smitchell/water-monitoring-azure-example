@@ -13,10 +13,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -73,14 +72,5 @@ public class AppConfigTest {
         assertThat(observation.getWaterFlow(), equalTo(seedWaterFlow));
         assertThat(observation.getLat(), equalTo(BigDecimal.valueOf(lat).setScale(6, RoundingMode.HALF_UP)));
         assertThat(observation.getLon(), equalTo(BigDecimal.valueOf(lon).setScale(6, RoundingMode.HALF_UP)));
-    }
-
-    @Test
-    public void testCallbackUrl() throws UnknownHostException {
-        String url = appConfig.callbackUrl();
-        assertThat(url, notNullValue());
-        assertThat(url, containsString("http://".concat(InetAddress.getLocalHost().getHostAddress())));
-        assertThat(url, containsString("/api/vi/stationPreferences"));
-
     }
 }

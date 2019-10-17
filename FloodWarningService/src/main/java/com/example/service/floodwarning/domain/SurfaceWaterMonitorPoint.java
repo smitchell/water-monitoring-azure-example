@@ -16,12 +16,18 @@ public class SurfaceWaterMonitorPoint implements Serializable {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
+    @Column(nullable = false)
     private String name;
-    @Column(name="station_id", unique=true)
+    @Column(name="station_id", unique=true, nullable = false)
     private String stationId;
+    @Column(nullable = false)
     private BigDecimal floodMinor;
+    @Column(nullable = false)
     private BigDecimal floodModerate;
+    @Column(nullable = false)
     private BigDecimal floodMajor;
+    @Column(nullable = false)
     private BigDecimal lat;
+    @Column(nullable = false)
     private BigDecimal lon;
 }

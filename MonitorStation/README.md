@@ -28,12 +28,13 @@ az servicebus namespace exists --name $NAMESPACE
 ```
 
 ### Create Service Bus namespace
+This uses the resource group created in the parent project README file.
 ```
 az servicebus namespace create --resource-group ${GROUP}  --name ${NAMESPACE}
 ```
 
-## Create a Service Bus Topic
-Create a topic for the river observation messages. For this exercise it is called "RiverObservationsTopic".
+## Create a Service Bus Topic for River Observations
+Create a topic for publishing river observation events. For this exercise it is called "RiverObservationsTopic".
 ```
 export RIVERS_TOPIC=RiverObservationsTopic
 az servicebus topic create --resource-group ${GROUP} \
@@ -70,3 +71,34 @@ Lookup the ReadWrite primaryConnectionString to use in the application configura
 
 "Endpoint=sb://rivers.servicebus.windows.net/;SharedAccessKeyName=ReadOnly;SharedAccessKey=********************"
 ```
+
+## Create an Azure Storage Account
+
+The project requires a Storage account in order to store river photos from the monitor stations. It uses BLOB storage.
+```
+export STORAGE_NAME=rivermonitorstorage
+az storage account create \
+  --resource-group $GROUP \
+  --kind StorageV2 \
+  --name $STORAGE_NAME \
+  --https-only false \
+  --location centralus
+```   
+
+Create Role-based access control (RBAC) to allow access to the Azure storage account.
+```
+az ad sp create-for-rbac --sdk-auth > river.azureauth
+```
+* ad : Activity Directory
+* sp : Service Principal
+* create-for-rbac : Create a service principal and configure its access to Azure resources.
+* --sdk-auth : Output result in compatible with Azure SDK auth file.
+
+Copy the river.azureauth into the monitor station project:
+* water-monitoring-azure-example/MonitorStation/src/main/resources/river.azureauth
+* water-monitoring-azure-example/MonitorStation/src/main/resources/river.azureauth
+
+The monitor station should now start-up and being publishing events and storing new image files in the Azure storage account.
+
+
+

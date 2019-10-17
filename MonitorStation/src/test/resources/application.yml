@@ -15,12 +15,12 @@ spring:
       idle-timeout: 1800000
       topic-client-id: riverobservationstopic
 
-
 station:
   id: LEVK1
-  seed-water-level: 25
+  seed-water-level: 15
   seed-water-flow: 100
-  increment-value: 0.3
+  max-water-level: 31
+  increment-value: 2
   lat: 39.326944
   lon: -94.909444
 

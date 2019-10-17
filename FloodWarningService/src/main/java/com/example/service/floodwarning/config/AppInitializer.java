@@ -1,6 +1,7 @@
 package com.example.service.floodwarning.config;
 
 import com.example.service.floodwarning.domain.SurfaceWaterMonitorPoint;
+import com.example.service.floodwarning.repository.FloodAdvisoryRepository;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,11 @@ import java.util.Optional;
 public class AppInitializer {
     public static final String STATION_ID = "LEVK1";
 
-    private SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository;
+    private final SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository;
 
     @Autowired
-    public AppInitializer(SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository) {
+    public AppInitializer(
+            final SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository) {
         this.surfaceWaterMonitorPointRepository = surfaceWaterMonitorPointRepository;
     }
 
@@ -38,6 +40,5 @@ public class AppInitializer {
             surfaceWaterMonitorPointRepository.save(surfaceWaterMonitorPoint);
             log.info("Seeded database: " + surfaceWaterMonitorPoint);
         }
-
     }
 }
