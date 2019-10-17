@@ -2,10 +2,11 @@ spring:
   datasource:
     url: jdbc:sqlserver://*
     username: FloodWarningService
-    password: AYcsiy40R8a3uIP7let/mw==
+    password: *
   jms:
     servicebus:
       connection-string: Endpoint=sb://*
+      idle-timeout: 1800000
       topic-client-id: riverobservationstopic
   jpa:
     generate-ddl: true
