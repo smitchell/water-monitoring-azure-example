@@ -36,7 +36,6 @@ public class RiverObservationProducer {
         log.info(event.getEventId() + ": " + event.getData());
         String msg = mapper.writeValueAsString(event);
         jmsTemplate.send(DESTINATION_NAME, session -> session.createTextMessage(msg));
-        log.info("Published: " + msg);
         return event;
     }
 
