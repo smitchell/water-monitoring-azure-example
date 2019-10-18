@@ -2,6 +2,13 @@ server:
   port: 9999
 
 spring:
+  cloud:
+    azure:
+      credential-file-path: river.azureauth
+      resource-group: azure-training
+      region: Central US
+      storage.account: rivermonitorstorage
+      use-http: true
   data:
     rest:
       basePath: /api/v1
@@ -22,3 +29,4 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
+seed-email-count: 500

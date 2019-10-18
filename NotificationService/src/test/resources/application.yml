@@ -1,4 +1,11 @@
 spring:
+  cloud:
+    azure:
+      credential-file-path: river.azureauth
+      resource-group: azure-training
+      region: Central US
+      storage.account: rivermonitorstorage
+      use-http: true
   data:
     rest:
       basePath: /api/v1
@@ -10,4 +17,4 @@ spring:
       connection-string: Endpoint=sb://*
       idle-timeout: 1800000
       topic-client-id: floodadvisorytopic
-
+seed-email-count: 5

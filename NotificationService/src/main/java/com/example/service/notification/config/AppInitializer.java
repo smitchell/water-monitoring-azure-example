@@ -4,6 +4,7 @@ import com.example.service.notification.domain.NotificationPreference;
 import com.example.service.notification.repository.NotificationPreferenceRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -13,12 +14,15 @@ import java.util.List;
 
 @Component
 public class AppInitializer {
-    public static long SEED_COUNT = 500;
-    private NotificationPreferenceRepository notificationPreferenceRepository;
+    private final long seedEmailCount;
+    private final NotificationPreferenceRepository notificationPreferenceRepository;
 
     @Autowired
-    public AppInitializer(NotificationPreferenceRepository notificationPreferenceRepository) {
+    public AppInitializer(
+            final NotificationPreferenceRepository notificationPreferenceRepository,
+            @Value("${seed-email-count}") final long seedEmailCount) {
         this.notificationPreferenceRepository = notificationPreferenceRepository;
+        this.seedEmailCount = seedEmailCount;
     }
 
     @PostConstruct
@@ -33,8 +37,8 @@ public class AppInitializer {
 
     private List<NotificationPreference> generateNotificationPreferences() {
        int count = 0;
-        List<NotificationPreference> preferences = new ArrayList<>(500);
-       while(count++ < SEED_COUNT) {
+        List<NotificationPreference> preferences = new ArrayList<>();
+       while(count++ < seedEmailCount) {
            preferences.add(generateNotificationPreference());
        }
        return preferences;

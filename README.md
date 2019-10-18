@@ -41,21 +41,7 @@ Uses data collected from monitoring stations to detect flood stage:
 * DELETE void /api/v1/notificationPreferences/{emailAddress}
 
 ### Events
-* notificationSent
-
-## API Gateway
-
-### API
-* void changeStationPreferences: StationPreferences preferences
-* StationPreferences getStationPreferences: String stationId
-* List riverForecast: String stationId
-* void addRecipient: NotificationPreferences notificationPreferences
-* void removeRecipient: String emailAddress
-
-### Events
-* stationOnline
-* stationOffline
-* measurementObserved
+* notificationReady
 
 # Running this Example
 

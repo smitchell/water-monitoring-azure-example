@@ -30,6 +30,7 @@ public class StorageService {
         this.cloudStorageAccount = csa;
         files = getOrCreateContainerReference(containerName);
     }
+
     @PostConstruct
     public void postConstruct() {
         Assert.notNull(cloudStorageAccount, "cloudStorageAccount must not be null");
