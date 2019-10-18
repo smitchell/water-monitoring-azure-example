@@ -1,14 +1,12 @@
-package com.example.service.floodwarning.domain;
+package com.example.service.notification.event;
 
-import com.sun.istack.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class RiverObservationEvent implements Serializable {
-    @NotNull
+public class ApplicationEvent implements Serializable {
     private String eventId;
     private Date createdAt;
     private String eventType;

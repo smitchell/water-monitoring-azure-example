@@ -1,0 +1,16 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+**/.DS_Store
+*.DS_Store
+.DS_Store
+/src/test/resources/river.azureauth
+/src/main/resources/river.azureauth

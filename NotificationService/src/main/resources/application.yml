@@ -1,18 +1,19 @@
 server:
-  port: 9090
+  port: 9999
+
 spring:
   data:
     rest:
       basePath: /api/v1
   datasource:
     url: jdbc:sqlserver://*
-    username: FloodWarningService
+    username: NotificationService
     password: *
   jms:
     servicebus:
       connection-string: Endpoint=sb://*
       idle-timeout: 1800000
-      topic-client-id: riverobservationstopic
+      topic-client-id: floodadvisorytopic
   jpa:
     generate-ddl: true
     hibernate:

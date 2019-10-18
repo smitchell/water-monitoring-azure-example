@@ -3,8 +3,8 @@ package com.example.service.floodwarning.test.controller;
 import com.example.service.floodwarning.controller.RiverObservationController;
 import com.example.service.floodwarning.domain.FloodAdvisory;
 import com.example.service.floodwarning.domain.Observation;
-import com.example.service.floodwarning.domain.RiverObservationEvent;
 import com.example.service.floodwarning.domain.SurfaceWaterMonitorPoint;
+import com.example.service.floodwarning.event.ApplicationEvent;
 import com.example.service.floodwarning.repository.FloodAdvisoryRepository;
 import com.example.service.floodwarning.repository.ObservationRepository;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
@@ -53,7 +53,7 @@ public class RiverObservationControllerTest {
     @InjectMocks
     private RiverObservationController riverObservationController;
 
-    private RiverObservationEvent riverObservationEvent;
+    private ApplicationEvent riverObservationEvent;
 
     private Observation observation;
 
@@ -79,7 +79,7 @@ public class RiverObservationControllerTest {
         when(observationRepository.save(any(Observation.class))).thenReturn(observation);
         when(observationRepository.findById(observation.getId())).thenReturn(Optional.of(observation));
 
-        riverObservationEvent = new RiverObservationEvent();
+        riverObservationEvent = new ApplicationEvent();
         riverObservationEvent.setEventId("43211f7b-9b41-4df9-99e3-534ea5f80e69");
         riverObservationEvent.setCreatedAt(new Date());
         riverObservationEvent.setEventType("SURFACE_WATER_OBSERVATION");

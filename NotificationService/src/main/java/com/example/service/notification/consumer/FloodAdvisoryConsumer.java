@@ -1,7 +1,7 @@
-package com.example.service.floodwarning.consumer;
+package com.example.service.notification.consumer;
 
-import com.example.service.floodwarning.controller.RiverObservationController;
-import com.example.service.floodwarning.event.ApplicationEvent;
+import com.example.service.notification.controller.FloodAdvisoryController;
+import com.example.service.notification.event.ApplicationEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,30 +13,30 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class RiverObservationConsumer {
+public class FloodAdvisoryConsumer {
 
-    private static final String TOPIC_NAME = "riverobservationstopic";
-    private static final String SUBSCRIPTION_NAME = "FloodMonitoring";
-    private final RiverObservationController riverObservationController;
+    private static final String TOPIC_NAME = "floodadvisorytopic";
+    private static final String SUBSCRIPTION_NAME = "FloodAdvisoryConsumer";
+    private final FloodAdvisoryController floodAdvisoryController;
 
     @Autowired
-    public RiverObservationConsumer(RiverObservationController riverObservationController) {
-        this.riverObservationController = riverObservationController;
+    public FloodAdvisoryConsumer(FloodAdvisoryController floodAdvisoryController) {
+        this.floodAdvisoryController = floodAdvisoryController;
     }
 
     @JmsListener(destination = TOPIC_NAME, containerFactory = "topicJmsListenerContainerFactory",
             subscription = SUBSCRIPTION_NAME)
     public void onMessage(Message<String> msg) {
         try {
-            ApplicationEvent event = parseRiverObservationMessage(msg);
+            ApplicationEvent event = parseFloodAdvisoryMessage(msg);
             log.debug("onMessage: " + event);
-            riverObservationController.processProcessRiverObservation(event);
+            floodAdvisoryController.processFloodAdvisoryEvent(event);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }
 
-    public ApplicationEvent parseRiverObservationMessage(Message<String> msg) throws IOException {
+    public ApplicationEvent parseFloodAdvisoryMessage(Message<String> msg) throws IOException {
         ApplicationEvent event = null;
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(msg.getPayload(), ApplicationEvent.class);

@@ -11,7 +11,7 @@ spring:
       use-http: true
   jms:
     servicebus:
-      connection-string: *
+      connection-string: Endpoint=sb://*
       idle-timeout: 1800000
       topic-client-id: riverobservationstopic
 

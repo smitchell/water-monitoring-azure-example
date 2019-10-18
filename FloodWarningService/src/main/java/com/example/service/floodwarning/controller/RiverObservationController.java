@@ -1,10 +1,10 @@
 package com.example.service.floodwarning.controller;
 
-import com.example.service.floodwarning.config.AppInitializer;
 import com.example.service.floodwarning.domain.FloodAdvisory;
 import com.example.service.floodwarning.domain.Observation;
-import com.example.service.floodwarning.domain.RiverObservationEvent;
 import com.example.service.floodwarning.domain.SurfaceWaterMonitorPoint;
+import com.example.service.floodwarning.event.ApplicationEvent;
+import com.example.service.floodwarning.producer.FloodAdvisoryProducer;
 import com.example.service.floodwarning.repository.FloodAdvisoryRepository;
 import com.example.service.floodwarning.repository.ObservationRepository;
 import com.example.service.floodwarning.repository.SurfaceWaterMonitorPointRepository;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
@@ -27,21 +26,24 @@ import java.util.Optional;
 @Controller
 public class RiverObservationController {
 
+    private final FloodAdvisoryProducer floodAdvisoryProducer;
     private final FloodAdvisoryRepository floodAdvisoryRepository;
     private final ObservationRepository observationRepository;
     private final SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository;
 
-    @Autowired
     public RiverObservationController(
-            final FloodAdvisoryRepository floodAdvisoryRepository,
-            final ObservationRepository observationRepository,
-            final SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository) {
+            FloodAdvisoryProducer floodAdvisoryProducer,
+            FloodAdvisoryRepository floodAdvisoryRepository,
+            ObservationRepository observationRepository,
+            SurfaceWaterMonitorPointRepository surfaceWaterMonitorPointRepository) {
+        this.floodAdvisoryProducer = floodAdvisoryProducer;
         this.floodAdvisoryRepository = floodAdvisoryRepository;
         this.observationRepository = observationRepository;
         this.surfaceWaterMonitorPointRepository = surfaceWaterMonitorPointRepository;
     }
 
-    public void processProcessRiverObservation(RiverObservationEvent riverObservationEvent) throws Exception {
+
+    public void processProcessRiverObservation(ApplicationEvent riverObservationEvent) throws Exception {
         Observation o = new Observation();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(riverObservationEvent.getData());
@@ -69,8 +71,7 @@ public class RiverObservationController {
         observationRepository.save(o);
         Optional<FloodAdvisory> optional = computeFloodAdvisory(o);
         if (optional.isPresent()) {
-            FloodAdvisory advisory = optional.get();
-            log.warn(advisory.getFloodAdvisoryType().concat(" FLOOD ADVISORY: ".concat(advisory.toString())));
+            floodAdvisoryProducer.publish(optional.get());
         }
     }
 

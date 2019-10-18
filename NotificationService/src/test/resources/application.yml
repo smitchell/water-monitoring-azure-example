@@ -9,5 +9,5 @@ spring:
     servicebus:
       connection-string: Endpoint=sb://*
       idle-timeout: 1800000
-      topic-client-id: riverobservationstopic
+      topic-client-id: floodadvisorytopic
 
