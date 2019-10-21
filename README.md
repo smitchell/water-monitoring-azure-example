@@ -12,6 +12,8 @@ It uses event-driven architecture. The heart of the system is a simulator that s
 
 I've forgone a gateway, the discovery service, and configuration service to focus on Azure technology. That means that the monitor station publishes directly to Azure and doesn't go through a gateway. There won't be a user interface. When you launch the projects, the events and notifications appear in the projects' console logs.
 
+I put a demo of this project on my YouTube channel (it is too big for GitHub): https://youtu.be/lW3zlj3zWjM
+
 Since it takes a little effort to setup the resources on Azure for this project I uploaded a demonstration of the running project to YouTube: https://youtu.be/lW3zlj3zWjM.
 
 ## Monitoring Stations
