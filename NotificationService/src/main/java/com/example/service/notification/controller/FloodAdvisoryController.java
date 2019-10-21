@@ -12,7 +12,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.util.Date;
 
 @Slf4j
@@ -27,7 +26,7 @@ public class FloodAdvisoryController {
         this.notificationPreferenceRepository = notificationPreferenceRepository;
     }
 
-    public long processFloodAdvisoryEvent(ApplicationEvent floodAdvisoryEvent) throws Exception {
+    public int processFloodAdvisoryEvent(ApplicationEvent floodAdvisoryEvent) throws Exception {
         String description = null;
         Double lat = null;
         Double lon = null;
@@ -52,21 +51,23 @@ public class FloodAdvisoryController {
          *** This is where spatial matching magic would occur. ***
          *** We'll return everybody for this example.          ***
          ******************************************************* */
-        long count = 0;
-        Iterable<NotificationPreference> iterable = notificationPreferenceRepository.findAll();
-        for (NotificationPreference preference : iterable) {
+        int count = 0;
+        Iterable<NotificationPreference> matchedEmailRecipients = notificationPreferenceRepository.findAll();
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setSentDate(new Date());
+        email.setFrom("no-reply@sink.sendgrid.net");
+        email.setReplyTo("no-reply@sink.sendgrid.net");
+        email.setSubject(description);
+        email.setText(String.format("<html><head><title>Flood Advisory</head><body><h1>%s</h1><body></html>", description));
+        log.info("\n\tStarting queuing of matched recipients.");
+        for (NotificationPreference preference : matchedEmailRecipients) {
             if (preference.isEmailEnabled()) {
-                SimpleMailMessage email = new SimpleMailMessage();
-                email.setSentDate(new Date());
-                email.setFrom("admin@sink.sendgrid.net");
-                email.setReplyTo("DO_NOT_REPLY@sink.sendgrid.net");
                 email.setTo(preference.getEmailAddress());
-                email.setSubject(description);
-                email.setText(String.format("<html><head><title>Flood Advisory</head><body><h1>%s</h1><body></html>", description));
                 queueService.queueEmail(email);
                 count++;
             }
         }
+        log.info(String.format("\n\tFinished queuing %s matched recipients.", count));
         return count;
     }
 }

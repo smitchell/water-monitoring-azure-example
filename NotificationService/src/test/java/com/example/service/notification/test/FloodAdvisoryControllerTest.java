@@ -30,7 +30,7 @@ public class FloodAdvisoryControllerTest {
     private AppInitializer appInitializer;
 
     @Value("${seed-email-count}")
-    private long seedEmailCount;
+    private int seedEmailCount;
 
     @Before
     public void runBefore() {
@@ -40,7 +40,7 @@ public class FloodAdvisoryControllerTest {
     @Test
     public void testProcessFloodAdvisoryEvent() throws Exception {
         ApplicationEvent event = TestHelper.generateFloodAdvisoryController();
-        long count = floodAdvisoryController.processFloodAdvisoryEvent(event);
+        int count = floodAdvisoryController.processFloodAdvisoryEvent(event);
         assertThat(count, equalTo(seedEmailCount));
     }
 }

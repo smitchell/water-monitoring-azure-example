@@ -25,7 +25,6 @@ public class FloodAdvisoryProducer {
     }
 
     public ApplicationEvent publish(FloodAdvisory floodAdvisory) throws JsonProcessingException {
-        log.warn("Publishing ".concat(floodAdvisory.getFloodAdvisoryType()).concat(" FLOOD ADVISORY: ".concat(floodAdvisory.toString())));
         ObjectMapper mapper = new ObjectMapper();
         ApplicationEvent event = new ApplicationEvent();
         event.setEventId(UUID.randomUUID().toString());
@@ -33,9 +32,9 @@ public class FloodAdvisoryProducer {
         event.setCreatedAt(floodAdvisory.getAdvisoryStartTime());
         event.setEventType(EVENT_TYPE);
         event.setData(mapper.writeValueAsString(floodAdvisory));
-        log.info(event.getEventId() + ": " + event.getData());
         String msg = mapper.writeValueAsString(event);
         jmsTemplate.send(DESTINATION_NAME, session -> session.createTextMessage(msg));
+        log.warn("\n\nPublishing ".concat(floodAdvisory.getFloodAdvisoryType()).concat(" FLOOD ADVISORY: ".concat(floodAdvisory.toString())));
         return event;
     }
 

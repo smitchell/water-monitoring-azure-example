@@ -1,6 +1,5 @@
 server:
-  port: 9999
-
+  port: 8002
 spring:
   cloud:
     azure:
@@ -30,3 +29,4 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
 seed-email-count: 500
+

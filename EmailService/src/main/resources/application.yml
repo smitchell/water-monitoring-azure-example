@@ -1,0 +1,12 @@
+server:
+  port: 8006
+spring:
+  cloud:
+    azure:
+      credential-file-path: river.azureauth
+      resource-group: azure-training
+      region: Central US
+      storage.account: rivermonitorstorage
+      use-http: true
+
+

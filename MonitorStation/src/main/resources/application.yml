@@ -21,4 +21,4 @@ station:
   lat: 39.326944
   lon: -94.909444
 server:
-  port: 8888
+  port: 8000

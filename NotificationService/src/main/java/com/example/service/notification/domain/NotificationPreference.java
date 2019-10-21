@@ -18,6 +18,12 @@ public class NotificationPreference implements Serializable {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
     @Column(unique = true)
     private String emailAddress;
 

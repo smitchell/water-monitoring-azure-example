@@ -33,9 +33,10 @@ public class RiverObservationProducer {
         event.setCreatedAt(observation.getTime());
         event.setEventType(EVENT_TYPE);
         event.setData(mapper.writeValueAsString(observation));
-        log.info(event.getEventId() + ": " + event.getData());
+
         String msg = mapper.writeValueAsString(event);
         jmsTemplate.send(DESTINATION_NAME, session -> session.createTextMessage(msg));
+        log.info(String.format("\n\tPublishing river level %s: %s", observation.getWaterLevel(), msg));
         return event;
     }
 
